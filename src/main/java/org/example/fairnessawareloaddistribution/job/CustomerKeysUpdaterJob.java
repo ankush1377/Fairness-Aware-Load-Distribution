@@ -2,7 +2,7 @@ package org.example.fairnessawareloaddistribution.job;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.fairnessawareloaddistribution.CustomerKeyProjection;
+import org.example.fairnessawareloaddistribution.entity.CustomerKeyProjection;
 import org.example.fairnessawareloaddistribution.config.FairnessConfig;
 import org.example.fairnessawareloaddistribution.entity.RecordStatus;
 import org.example.fairnessawareloaddistribution.repository.RecordRepository;

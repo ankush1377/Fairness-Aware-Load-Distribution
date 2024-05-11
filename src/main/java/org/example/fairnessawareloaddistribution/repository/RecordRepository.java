@@ -1,6 +1,6 @@
 package org.example.fairnessawareloaddistribution.repository;
 
-import org.example.fairnessawareloaddistribution.CustomerKeyProjection;
+import org.example.fairnessawareloaddistribution.entity.CustomerKeyProjection;
 import org.example.fairnessawareloaddistribution.entity.Record;
 import org.example.fairnessawareloaddistribution.entity.RecordStatus;
 import org.springframework.data.domain.Pageable;

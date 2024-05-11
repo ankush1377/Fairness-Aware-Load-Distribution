@@ -1,4 +1,4 @@
-package org.example.fairnessawareloaddistribution;
+package org.example.fairnessawareloaddistribution.entity;
 
 /**
  * @author ankushs

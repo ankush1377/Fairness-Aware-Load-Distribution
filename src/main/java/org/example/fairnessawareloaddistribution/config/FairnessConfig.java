@@ -93,22 +93,4 @@ public class FairnessConfig {
     public synchronized Set<String> getKeysForNode(String node) {
         return nodeToKeys.get(node);
     }
-
-    public static void main(String[] args) {
-        FairnessConfig config = new FairnessConfig();
-        config.addNode("node1");
-        config.addNode("node2");
-        config.addNode("node3");
-
-        config.setKeys(Set.of("key1", "key2", "key3", "key4", "key5", "key6", "key7", "key8", "key9", "key10", "key11"));
-
-        System.out.println(config.getKeysForNode("node1"));
-        System.out.println(config.getKeysForNode("node2"));
-        System.out.println(config.getKeysForNode("node3"));
-
-        config.removeNode("node1");
-
-        System.out.println(config.getKeysForNode("node2"));
-        System.out.println(config.getKeysForNode("node3"));
-    }
 }
