@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fairness-aware-load-distribution
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fairness-aware-load-distribution
+  template:
+    metadata:
+      labels:
+        app: fairness-aware-load-distribution
+    spec:
+      containers:
+        - name: fairness-aware-load-distribution
+          image: fairness-aware-load-distribution:0.0.1
+          imagePullPolicy: IfNotPresent
+          args: [ "--node.name=$(POD_NAME)", "--kubernetes.namespace=$(NAMESPACE)", "--kubernetes.deploymentName=$(DEPLOYMENT_NAME)" ]
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DEPLOYMENT_NAME
+              value: fairness-aware-load-distribution
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fairness-aware-load-distribution
+spec:
+    selector:
+        app: fairness-aware-load-distribution
+    ports:
+      - protocol: TCP
+        port: 8080
+        targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:5.0.24
+          ports:
+            - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-watcher-role
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "pods" ]
+    verbs: [ "get", "list", "watch" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pod-watcher-role-binding
+  namespace: default
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: default
+roleRef:
+  kind: Role
+  name: pod-watcher-role
+  apiGroup: rbac.authorization.k8s.io
